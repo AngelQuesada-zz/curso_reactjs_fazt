@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
+import React, {
+  Component
+} from 'react';
 
 class TodoForm extends Component {
-  constructor () {
+
+  constructor() {
+
     super();
     this.state = {
       title: '',
@@ -11,30 +15,71 @@ class TodoForm extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.onAddTodo(this.state);
+  is_empty(element) {
+
+    if (element === null || element === "undefined" || element === "") {
+      return true
+    } else {
+      return false
+    }
+
+  }
+
+  check_form() {
+
+    if (this.is_empty(this.state.title) ||
+      this.is_empty(this.state.responsible) ||
+      this.is_empty(this.state.description) ||
+      this.is_empty(this.state.priority)) {
+      alert("You must fill all the fields")
+      return false
+    } else {
+      return true
+    }
+
+  }
+
+  set_empty() {
+
     this.setState({
       title: '',
       responsible: '',
       description: '',
       priority: 'low'
     });
+
+  }
+
+  handleSubmit(e) {
+
+    e.preventDefault();
+    if (!this.check_form()) {
+      return false;
+    }
+    this.props.onAddTodo(this.state);
+    this.set_empty();
+
   }
 
   handleInputChange(e) {
-    const {value, name} = e.target;
+
+    const {value,name} = e.target;
     console.log(value, name);
     this.setState({
       [name]: value
     });
+
   }
 
   render() {
     return (
-      <div className="card">
+      <div className="card task-form">
+        <div className='card-header'>
+          Add a new task
+        </div>
         <form onSubmit={this.handleSubmit} className="card-body">
           <div className="form-group">
             <input
@@ -79,7 +124,7 @@ class TodoForm extends Component {
             </select>
           </div>
           <button type="submit" className="btn btn-primary">
-            Save
+            Save Task
           </button>
         </form>
       </div>
